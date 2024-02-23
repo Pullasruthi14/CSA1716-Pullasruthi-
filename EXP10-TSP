@@ -1,0 +1,41 @@
+import sys
+
+def tsp(graph, start, end):
+    n = len(graph)
+    all_sets = (1 << n) - 1
+    memo = {}
+
+    def dp(curr, visited):
+        if visited == all_sets and curr == end:
+            return graph[curr][end]  # Return to the ending city
+        
+        if (curr, visited) in memo:
+            return memo[(curr, visited)]
+        
+        min_cost = sys.maxsize
+        for next_city in range(n):
+            if not (visited & (1 << next_city)):
+                cost = graph[curr][next_city] + dp(next_city, visited | (1 << next_city))
+                min_cost = min(min_cost, cost)
+        
+        memo[(curr, visited)] = min_cost
+        return min_cost
+
+    return dp(start, 1 << start)  # Start from the starting city
+
+# Get graph input from the user
+n = int(input("Enter the number of cities: "))
+print("Enter the cost matrix (one row at a time):")
+graph = []
+for _ in range(n):
+    row = list(map(int, input().split()))
+    graph.append(row)
+
+# Get starting and ending nodes from the user
+start_node = int(input("Enter the starting node: "))
+end_node = int(input("Enter the ending node: "))
+
+# Solve the TSP
+shortest_path_cost = tsp(graph, start_node, end_node)
+
+print("Shortest Path Cost:", shortest_path_cost)
