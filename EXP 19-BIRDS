@@ -13,4 +13,4 @@ bird(kingfisher).
 bird(thrush).
 
 
-can_fly(X):- bird(X).female(pam). %clauses
+can_fly(X):- bird(X).
